@@ -20,7 +20,7 @@ export const routes = [
       const task = {
         id: randomUUID(),
         title,
-        description,
+        description
       }
       database.insert('tasks', task)
       return res.writeHead(201).end()
