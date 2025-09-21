@@ -21,10 +21,28 @@ export const routes = [
       const task = {
         id: randomUUID(),
         title,
-        description
+        description,
+        completed_at: null,
+        created_at: new Date(),
+        updated_at: new Date()
       }
       database.insert('tasks', task)
       return res.writeHead(201).end()
+    }
+  },
+  {
+    method: "PUT",
+    path: buildRoutePath("/tasks/:id"),
+    handler: (req, res) => {
+      const { id } = req.params
+      const { title, description } = req.body
+
+      database.update('tasks', id, {
+        title,
+        description,
+        updated_at: new Date()
+      })
+      return res.writeHead(204).end()
     }
   },
   {
