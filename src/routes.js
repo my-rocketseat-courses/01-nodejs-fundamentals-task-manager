@@ -10,6 +10,7 @@ export const routes = [
     path: buildRoutePath("/tasks"),
     handler: (req, res) => {
       const tasks = database.select('tasks')
+      
       return res.end(JSON.stringify(tasks))
     }
   },
@@ -18,6 +19,19 @@ export const routes = [
     path: buildRoutePath("/tasks"),
     handler: (req, res) => {
       const { title, description } = req.body
+
+      if (!title) {
+        return res.writeHead(400).end(
+          JSON.stringify({ message: 'Title is required.' }),
+        )
+      }
+
+      if (!description) {
+        return res.writeHead(400).end(
+          JSON.stringify({message: 'Description is required.' })
+        )
+      }
+
       const task = {
         id: randomUUID(),
         title,
@@ -26,7 +40,9 @@ export const routes = [
         created_at: new Date(),
         updated_at: new Date()
       }
+
       database.insert('tasks', task)
+      
       return res.writeHead(201).end()
     }
   },
@@ -37,11 +53,24 @@ export const routes = [
       const { id } = req.params
       const { title, description } = req.body
 
+      if(!title && !description) {
+        return res.writeHead(400).end(
+          JSON.stringify({message: "Title or description are required."})
+        )
+      }
+
+      const [task] = database.select('tasks', { id })
+
+      if (!task) {
+        return res.writeHead(404).end()
+      }
+
       database.update('tasks', id, {
         title,
         description,
         updated_at: new Date()
       })
+      
       return res.writeHead(204).end()
     }
   },
@@ -51,9 +80,18 @@ export const routes = [
     handler: (req, res) => {
       const { id } = req.params
 
+      const [task] = database.select('tasks', { id })
+
+      if (!task) {
+        return res.writeHead(404).end()
+      }
+
+      const toggleTaskCompletedAt = task.completed_at === null ? new Date() : null
+
       database.update('tasks', id, {
-        completed_at: new Date()
+        completed_at: toggleTaskCompletedAt
       })
+
       return res.writeHead(204).end()
     }
   },
@@ -62,6 +100,12 @@ export const routes = [
     path: buildRoutePath("/tasks/:id"),
     handler: (req, res) => {
       const { id } = req.params
+
+      const [task] = database.select('tasks', { id })
+
+      if (!task) {
+        return res.writeHead(404).end()
+      }
 
       database.delete("tasks", id)
       
