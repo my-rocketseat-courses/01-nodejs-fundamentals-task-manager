@@ -19,7 +19,7 @@ The API provides a complete CRUD (Create, Read, Update, Delete) system for task 
 - ✅ **Update Task** - Modify task title and description by ID
 - ✅ **Delete Task** - Remove tasks by ID
 - ✅ **Mark Task as Completed** - Toggle task completion status by ID
-- ⏳ **Import Tasks from CSV** - Bulk import tasks (challenge feature)
+- ✅ **Import Tasks from CSV** - Bulk import tasks (challenge feature)
 
 ## 🛠️ Project Structure
 
@@ -99,4 +99,4 @@ This is the first challenge from the **Node.js Fundamentals** course, focusing o
 - [x] Update task by `id`
 - [x] Delete task by `id`
 - [x] Mark task as completed by `id`
-- [ ] Import tasks from CSV file upload
+- [x] Import tasks from CSV file upload
